@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  sso-test:
+    build: .
+    container_name: sso-test
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    networks:
+      - main-nginx-net
+    depends_on:
+      sso-db:
+        condition: service_healthy
+
+networks:
+  main-nginx-net:
+    external: true
+

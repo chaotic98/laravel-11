@@ -1,0 +1,25 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH != "main"
+      when: never
+    - when: always
+
+stages:
+  - deploy
+
+deploy_image:
+  stage: deploy
+  tags:
+    - remote
+    - shell
+  before_script:
+    - cp $ENV_FILE .env
+  script:
+    - docker compose up -d && docker compose restart
+  after_script:
+    - echo "Running related commands..."
+# If you need to run your test during the pipeline, uncomment next line
+#    - docker compose exec -it messenger php artisan test
+# If you need to migrate databases, uncomment next line.
+#    - docker compose exec -it messenger php artisan migrate
+
